@@ -1,0 +1,57 @@
+header {
+  width: 72vw;
+  height: 5vh;
+  background-color: darkslategrey;
+
+  display: flex;
+  align-items: center;
+  border-bottom-right-radius: 25px;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+  box-sizing: border-box;
+}
+
+header > * {
+  height: 100%;
+  width: 15%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header > p {
+  width: 20%;
+  color: wheat;
+  text-shadow: 1px 1px 1px darkgray;
+  letter-spacing: 1px;
+  font-size: large;
+  border-right: 2px solid black;
+  cursor: pointer;
+  transition-duration: 500ms;
+}
+
+header > p:hover {
+  color: rgb(250, 231, 196);
+  background-color: rgb(50, 88, 88);
+}
+
+header > button:first-child {
+  border-left: 1px solid black;
+}
+
+header > button {
+  outline: none;
+  border: none;
+
+  cursor: pointer;
+  background-color: rgb(221, 218, 218);
+  transition-duration: 500ms;
+  border-right: 3px solid black;
+}
+
+header > button:hover {
+  color: white;
+  text-shadow: 1px 1px 1px darkgray;
+  background-color: rgb(67, 150, 165);
+}

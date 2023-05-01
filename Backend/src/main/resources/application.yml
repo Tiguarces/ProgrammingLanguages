@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    username: suse
+    password: suse
+    url: jdbc:mysql://localhost:52000/ProgrammingLanguages?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Warsaw&characterEncoding=UTF-8
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MariaDBDialect
+
+  hibernate:
+    ddl-auto: none
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  flyway:
+    schemas: ProgrammingLanguages
+    url: jdbc:mysql://localhost:52000/ProgrammingLanguages?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Warsaw&characterEncoding=UTF-8
+    locations: classpath:/migrations
+    baselineVersion: 1.0
+    baselineDescription: Initial baseline
+    baseline-on-migrate: true
+    user: suse
+    password: suse
+
+  springdoc:
+    swagger-ui:
+      path: /swagger
+      tryItOutEnabled: true
+    api-docs:
+      path: /api-doc
+
+  custom:
+    chromium:
+      binary: /usr/bin/chromium
+      driver: /usr/bin/chromedriver

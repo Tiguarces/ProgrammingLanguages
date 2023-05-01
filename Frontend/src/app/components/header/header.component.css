@@ -1,13 +1,12 @@
 header {
-  width: 72vw;
+  width: 100vw;
   height: 5vh;
   background-color: darkslategrey;
 
   display: flex;
   align-items: center;
-  border-bottom-right-radius: 25px;
+  justify-content: center;
   border-bottom: 2px solid black;
-  border-right: 2px solid black;
   box-sizing: border-box;
 }
 
@@ -40,18 +39,24 @@ header > button:first-child {
   border-left: 1px solid black;
 }
 
-header > button {
+header > button, a {
   outline: none;
   border: none;
 
+  font-size: 13.5px;
   cursor: pointer;
   background-color: rgb(221, 218, 218);
   transition-duration: 500ms;
   border-right: 3px solid black;
 }
 
-header > button:hover {
+header > button:hover, a:hover {
   color: white;
   text-shadow: 1px 1px 1px darkgray;
   background-color: rgb(67, 150, 165);
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }

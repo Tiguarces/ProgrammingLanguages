@@ -30,14 +30,14 @@ spring:
     user: suse
     password: suse
 
-  springdoc:
-    swagger-ui:
-      path: /swagger
-      tryItOutEnabled: true
-    api-docs:
-      path: /api-doc
+springdoc:
+  swagger-ui:
+    path: /swagger
+    tryItOutEnabled: true
+  api-docs:
+    path: /api-doc
 
-  custom:
-    chromium:
-      binary: /usr/bin/chromium
-      driver: /usr/bin/chromedriver
+custom:
+  chromium:
+    binary: /usr/bin/chromium
+    driver: /usr/bin/chromedriver

@@ -2,13 +2,14 @@ package com.Tiguarces.ProgrammingLanguages.model.language;
 
 import com.Tiguarces.ProgrammingLanguages.model.tiobe.TiobeIndex;
 import com.Tiguarces.ProgrammingLanguages.model.trend.LanguageTrend;
+import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageParser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -24,7 +25,7 @@ public class Language {
     @Id
     @Column(name = "LanguageId")
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "Name", nullable = false, unique = true)
     private String name;
@@ -51,7 +52,7 @@ public class Language {
     private String thumbnailPath;
 
     @Column(name = "FirstAppeared", nullable = false)
-    private LocalDate firstAppeared;
+    private int firstAppeared;
 
     @OneToMany(orphanRemoval = true, cascade = ALL)
     @JoinColumn(name = "TiobeIndexId", referencedColumnName = "LanguageId")
@@ -60,4 +61,20 @@ public class Language {
     @OneToMany(orphanRemoval = true, cascade = ALL)
     @JoinColumn(name = "TrendId", referencedColumnName = "LanguageId")
     private List<LanguageTrend> gitHubTrendList;
+
+    public static Language toEntity(final LanguageParser.DoneLanguage doneLanguage) {
+        return new Language(null,
+                doneLanguage.getName(),
+                doneLanguage.getParadigms(),
+                doneLanguage.getFileExtensions(),
+                doneLanguage.getStableRelease(),
+                doneLanguage.getDescription(),
+                doneLanguage.getWebsite(),
+                doneLanguage.getImplementations(),
+                doneLanguage.getThumbnailPath(),
+                doneLanguage.getFirstAppeared(),
+                Collections.emptyList(),
+                Collections.emptyList()
+        );
+    }
 }

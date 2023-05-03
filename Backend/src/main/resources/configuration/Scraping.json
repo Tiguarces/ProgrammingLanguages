@@ -1,0 +1,105 @@
+{
+  "languages": {
+    "enabled": {
+      "defaultSite": "https://en.wikipedia.org/wiki/%s_(programming_language)",
+      "defaultPages": [ "Python", "C", "Java", "C++", "C_Sharp", "JavaScript",
+                        "PHP", "Go", "Matlab", "R", "Ruby", "Rust",
+                        "Swift", "Perl", "F_Sharp", "Lisp", "Lua",
+                        "Haskell", "Julia", "Groovy", "Kotlin", "Dart",
+                        "Scala", "D", "Ada"],
+      "customPages": [
+        {
+          "name": "Assembly language",
+          "site": "https://en.wikipedia.org/wiki/Assembly_language",
+          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Netwide_Assembler.svg/1200px-Netwide_Assembler.svg.png"
+        },
+        {
+          "name": "Visual Basic (.NET)",
+          "site": "https://en.wikipedia.org/wiki/Visual_Basic_(.NET)",
+          "thumbnailPath": null
+        },
+        {
+          "name": "Fortran",
+          "site": "https://en.wikipedia.org/wiki/Fortran_(programming_language)",
+          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Fortran_logo.svg/1200px-Fortran_logo.svg.png"
+        },
+        {
+          "name": "Emacs Lisp",
+          "site": "https://en.wikipedia.org/wiki/Emacs_Lisp",
+          "thumbnailPath": null
+        },
+        {
+          "name": "TypeScript",
+          "site": "https://en.wikipedia.org/wiki/TypeScript",
+          "thumbnailPath": null
+        }
+      ]
+    },
+
+    "disabled": {
+      "languages": [
+        "Scratch", "Classic Visual Basic",
+        "SAS", "FoxPro", "COBOL", "Transact-SQL",
+        "PL/SQL", "CFML", "Prolog", "RPG", "OpenEdge ABL",
+        "Bash", "ABAP", "Logo", "AWK", "LabVIEW",
+        "PowerShell", "SQL"
+      ]
+    }
+  },
+
+  "tasks": {
+    "tiobeIndex": {
+      "site": "https://www.tiobe.com/tiobe-index/",
+      "scraping": {
+        "mainLanguagesBox": "table#top20 tbody",
+        "otherLanguagesBox": "table#otherPL tbody",
+        "singleRow": "tr",
+
+        "fieldPositions": {
+          "mainLanguages": {
+            "POSITION": 0,
+            "CHANGE_ICON": 2,
+            "LANGUAGE_NAME": 4
+          },
+
+          "otherLanguages": {
+            "POSITION": 0,
+            "LANGUAGE_NAME": 1
+          }
+        }
+      }
+    },
+
+    "wikipedia": {
+      "thumbnailPath": "td.infobox-image a.image img",
+      "paradigms": "table.infobox.vevent tr:contains(Paradigm) td",
+      "implementations": "table tr:contains(Major implementations) + tr",
+      "firstAppeared": "table.infobox.vevent tr:matches([fF]irst\\s*(&nbsp;)?appeared\\s*) td",
+      "stableRelease": "table.infobox.vevent tr:contains(Stable release) td",
+      "fileExtensions": "table.infobox.vevent tr:contains(Filename extensions) td",
+      "website": "table.infobox.vevent tr:contains(Website) td",
+      "description": "table.infobox.vevent + p"
+    },
+
+    "trends": {
+      "site": "https://github.com/trending/%s?since=monthly",
+      "scraping": {
+        "repositoriesBox": "div.Box div[data-hpc]",
+        "singleRepository": {
+          "box": "article.Box-row",
+          "name": "h1.h3.lh-condensed",
+          "description": "p:first-child",
+          "link": "a[href]"
+        },
+
+        "customLanguagePhrases": {
+          "C_Sharp": "C#",
+          "F_Sharp": "F#",
+          "Emacs Lisp": "emacs-lisp",
+          "Visual Basic (.NET)": "visual-basic-.net",
+          "Assembly language": "assembly"
+        }
+      }
+    }
+  }
+}

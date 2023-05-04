@@ -11,27 +11,32 @@
         {
           "name": "Assembly language",
           "site": "https://en.wikipedia.org/wiki/Assembly_language",
-          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Netwide_Assembler.svg/1200px-Netwide_Assembler.svg.png"
+          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Netwide_Assembler.svg/1200px-Netwide_Assembler.svg.png",
+          "website": null
         },
         {
           "name": "Visual Basic (.NET)",
           "site": "https://en.wikipedia.org/wiki/Visual_Basic_(.NET)",
-          "thumbnailPath": null
+          "thumbnailPath": null,
+          "website": null
         },
         {
           "name": "Fortran",
           "site": "https://en.wikipedia.org/wiki/Fortran_(programming_language)",
-          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Fortran_logo.svg/1200px-Fortran_logo.svg.png"
+          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Fortran_logo.svg/1200px-Fortran_logo.svg.png",
+          "website": null
         },
         {
           "name": "Emacs Lisp",
           "site": "https://en.wikipedia.org/wiki/Emacs_Lisp",
-          "thumbnailPath": null
+          "thumbnailPath": null,
+          "website": "https://lisp-lang.org/"
         },
         {
           "name": "TypeScript",
           "site": "https://en.wikipedia.org/wiki/TypeScript",
-          "thumbnailPath": null
+          "thumbnailPath": null,
+          "website": null
         }
       ]
     },

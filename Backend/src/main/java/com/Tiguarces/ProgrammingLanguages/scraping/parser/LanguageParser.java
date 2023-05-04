@@ -33,10 +33,12 @@ public final class LanguageParser implements Parser<DoneLanguage, FieldName, Lan
                 parseStableRelease((String) dataToParse.get(FieldName.STABLE_RELEASE)),
                 parseNullableField((String) dataToParse.get(FieldName.FILE_EXTENSIONS)),
                 parseNullableField((String) dataToParse.get(FieldName.DESCRIPTION)),
-                parseNullableField((String) dataToParse.get(FieldName.WEBSITE)),
+
+                parseWebsite((String) dataToParse.get(FieldName.WEBSITE),
+                                      dataToParse.get(FieldName.CUSTOM_PAGE)),
 
                 parseThumbnailPath((String) dataToParse.get(FieldName.THUMBNAIL_PATH),
-                                            dataToParse.get(FieldName.OPTIONAL_THUMBNAIL_PATH))
+                                            dataToParse.get(FieldName.CUSTOM_PAGE))
         );
     }
 
@@ -104,10 +106,17 @@ public final class LanguageParser implements Parser<DoneLanguage, FieldName, Lan
         } else return thumbnailPath;
     }
 
+    private String parseWebsite(final String website, final Object customPage) {
+        if(customPage instanceof LanguageConfig.Enabled.CustomLanguage otherLanguage) {
+            return (isBlank(website))
+                     ? otherLanguage.website() : website;
+        } else return website;
+    }
+
     public enum FieldName {
         NAME, FIRST_APPEARED, DESCRIPTION, PARADIGMS, IMPLEMENTATIONS,
         FILE_EXTENSIONS, WEBSITE, THUMBNAIL_PATH, STABLE_RELEASE,
-        OPTIONAL_THUMBNAIL_PATH
+        CUSTOM_PAGE
     }
 
     @Getter

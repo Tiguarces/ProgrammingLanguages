@@ -99,7 +99,7 @@ public final class WikipediaTask implements Task {
             dataToParse.put(WEBSITE                  , browserClient.findElement(wikipediaTask.website()));
             dataToParse.put(FIRST_APPEARED           , browserClient.findElement(wikipediaTask.firstAppeared()));
             dataToParse.put(THUMBNAIL_PATH           , browserClient.findElement(wikipediaTask.thumbnailPath()));
-            dataToParse.put(OPTIONAL_THUMBNAIL_PATH  , customPage);
+            dataToParse.put(CUSTOM_PAGE              , customPage);
 
         return languageParser.parse(dataToParse);
     }

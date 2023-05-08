@@ -24,7 +24,8 @@ public record TaskConfig(TiobeIndex tiobeIndex, Wikipedia wikipedia, Trends tren
     public record Trends(String site, Scraping scraping) {
         public record Scraping(String repositoriesBox, SingleRepository singleRepository,
                                Map<String, String> customLanguagePhrases) {
-            public record SingleRepository(String box, String name, String description, String link) { }
+            public record SingleRepository(String box, String name, String description,
+                                           String link, String totalStars, String monthlyStars) { }
         }
     }
 }

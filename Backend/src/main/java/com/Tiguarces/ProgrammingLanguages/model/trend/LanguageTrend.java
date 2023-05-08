@@ -1,6 +1,7 @@
 package com.Tiguarces.ProgrammingLanguages.model.trend;
 
 import com.Tiguarces.ProgrammingLanguages.model.language.Language;
+import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class LanguageTrend {
     @Id
     @Column(name = "TrendId")
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "RepositoryName", nullable = false, unique = true)
     private String repositoryName;
@@ -31,10 +32,10 @@ public class LanguageTrend {
     private String linkToRepository;
 
     @Column(name = "TotalStars", nullable = false)
-    private int totalStars;
+    private double totalStars;
 
     @Column(name = "MonthlyStars", nullable = false)
-    private int monthlyStars;
+    private double monthlyStars;
 
     @Column(name = "TrendsDate", nullable = false)
     private LocalDate trendsDate;
@@ -42,4 +43,15 @@ public class LanguageTrend {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "LanguageId", referencedColumnName = "LanguageId")
     private Language language;
+
+    public static LanguageTrend toEntity(final LanguageTrendsParser.DoneLanguageTrend doneLanguageTrend, final LocalDate trendDate, final Language language) {
+        return new LanguageTrend(null,
+                doneLanguageTrend.repositoryName(),
+                doneLanguageTrend.linkToRepository(),
+                doneLanguageTrend.totalStars(),
+                doneLanguageTrend.monthlyStars(),
+                trendDate,
+                language
+        );
+    }
 }

@@ -9,14 +9,18 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.util.CollectionUtils;
 
 import java.io.Closeable;
 import java.io.OutputStream;
 import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
 
 import static com.Tiguarces.ProgrammingLanguages.scraping.ScrapingConstants.*;
 import static com.Tiguarces.ProgrammingLanguages.scraping.browser.BrowserConstants.*;
 import static java.time.temporal.ChronoUnit.SECONDS;
+import static org.springframework.util.CollectionUtils.*;
 
 @Slf4j
 public final class BrowserClient implements Closeable {
@@ -51,7 +55,19 @@ public final class BrowserClient implements Closeable {
     }
 
     private static final String WIKIPEDIA_DESCRIPTION_SELECTOR = ConfigurationLoader.wikipediaTask.description();
-    private static final String WIKIPEDIA_IMAGE_SELECTOR = ConfigurationLoader.wikipediaTask.thumbnailPath();
+
+    public List<Element> findElements(final String selector) {
+        return websiteDocument.select(Objects.requireNonNull(selector));
+    }
+
+    public String selectElementAndGetValue(final Element element, final String selector) {
+        Objects.requireNonNull(element);
+        Objects.requireNonNull(selector);
+
+        var elements = element.select(selector);
+        return (!isEmpty(elements))
+                 ? elements.text() : null ;
+    }
 
     public String findElement(final String selector) {
         Elements foundElement = websiteDocument.select(selector);
@@ -59,8 +75,12 @@ public final class BrowserClient implements Closeable {
         if(!foundElement.isEmpty()) {
             Element currentElement = foundElement.get(0);
 
-            if(selector.equals(WIKIPEDIA_IMAGE_SELECTOR)) {
+            if(selector.contains(SRC_ATTR_SELECTOR)) {
                 return currentElement.attr(SRC_ATTR);
+            }
+
+            if(selector.contains(HREF_ATTR_SELECTOR)) {
+                return currentElement.attr(HREF_ATTR);
             }
 
             if(selector.equals(WIKIPEDIA_DESCRIPTION_SELECTOR)) {

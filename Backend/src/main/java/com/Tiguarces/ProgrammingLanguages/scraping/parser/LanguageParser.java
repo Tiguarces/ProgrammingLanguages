@@ -4,7 +4,6 @@ import com.Tiguarces.ProgrammingLanguages.model.language.Language;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.LanguageConfig;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.text.WordUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,7 +15,8 @@ import java.util.regex.Matcher;
 import static com.Tiguarces.ProgrammingLanguages.scraping.ScrapingConstants.*;
 import static com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageParser.DoneLanguage;
 import static com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageParser.FieldName;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 public final class LanguageParser implements Parser<DoneLanguage, FieldName, Language> {
@@ -28,11 +28,11 @@ public final class LanguageParser implements Parser<DoneLanguage, FieldName, Lan
         return new DoneLanguage(
                 parseName((String) dataToParse.get(FieldName.NAME)),
                 parseDate((String) dataToParse.get(FieldName.FIRST_APPEARED)),
-                parseNullableField((String) dataToParse.get(FieldName.PARADIGMS)),
-                parseNullableField((String) dataToParse.get(FieldName.IMPLEMENTATIONS)),
+                parseField((String) dataToParse.get(FieldName.PARADIGMS)),
+                parseField((String) dataToParse.get(FieldName.IMPLEMENTATIONS)),
                 parseStableRelease((String) dataToParse.get(FieldName.STABLE_RELEASE)),
-                parseNullableField((String) dataToParse.get(FieldName.FILE_EXTENSIONS)),
-                parseNullableField((String) dataToParse.get(FieldName.DESCRIPTION)),
+                parseField((String) dataToParse.get(FieldName.FILE_EXTENSIONS)),
+                parseField((String) dataToParse.get(FieldName.DESCRIPTION)),
 
                 parseWebsite((String) dataToParse.get(FieldName.WEBSITE),
                                       dataToParse.get(FieldName.CUSTOM_PAGE)),
@@ -44,26 +44,9 @@ public final class LanguageParser implements Parser<DoneLanguage, FieldName, Lan
 
     @Override
     public List<Language> parseToEntity(final List<DoneLanguage> doneValues) {
-        return doneValues.stream()
+        return Objects.requireNonNull(doneValues).stream()
                  .map(Language::toEntity)
-                .toList();
-    }
-
-    private String parseName(final String value) {
-        return WordUtils.capitalize(getValueOrThrow(value, FieldName.NAME).toLowerCase());
-    }
-
-    private String parseNullableField(final String value) {
-        return (isNotBlank(value))
-                ? value.replaceAll(WIKIPEDIA_TEXT_REGEX_REPLACE, EMPTY) : null;
-    }
-
-    private String getValueOrThrow(final String value, final FieldName fieldName) {
-        if(isBlank(value)) {
-            throw new IllegalArgumentException(PARSING_LANGUAGE_EXCEPTION_MESSAGE + fieldName.name());
-        }
-
-        return value.replaceAll(WIKIPEDIA_TEXT_REGEX_REPLACE, EMPTY);
+                 .toList();
     }
 
     private String parseStableRelease(String stableRelease) {
@@ -149,5 +132,12 @@ public final class LanguageParser implements Parser<DoneLanguage, FieldName, Lan
             Objects.requireNonNull(firstAppeared);
             this.firstAppeared = (firstAppeared.getYear());
         }
+    }
+
+    @Override
+    public String getValueOrThrow(String value, final FieldName fieldName) {
+        value = Parser.super.getValueOrThrow(value, fieldName);
+        value = value.replaceAll(WIKIPEDIA_TEXT_REGEX_REPLACE, EMPTY);
+        return value;
     }
 }

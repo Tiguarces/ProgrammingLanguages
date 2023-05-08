@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,5 +18,10 @@ public class LanguageService implements ServiceTemplate {
     public void saveAll(final List<Language> doneLanguages) {
         Objects.requireNonNull(doneLanguages);
         languageRepository.saveAll(doneLanguages);
+    }
+
+    @Override
+    public Optional<Language> findByName(final String name) {
+        return languageRepository.findByName(Objects.requireNonNull(name));
     }
 }

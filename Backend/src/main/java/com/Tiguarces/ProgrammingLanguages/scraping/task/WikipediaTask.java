@@ -8,7 +8,6 @@ import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageParser;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageParser.DoneLanguage;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageParser.FieldName;
 import com.Tiguarces.ProgrammingLanguages.service.language.LanguageService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
+import static com.Tiguarces.ProgrammingLanguages.scraping.ScrapingConstants.SINGLE_LANGUAGE_TASK_LOG;
 import static com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageParser.FieldName.*;
 import static java.lang.String.format;
 
@@ -35,28 +35,27 @@ public final class WikipediaTask implements Task {
     private static final List<LanguageConfig.Enabled.CustomLanguage> customLanguagesList = enabledLanguages.customPages();
 
     private static final String defaultSitePattern = enabledLanguages.defaultSite();
-    private static final String SINGLE_LANGUAGE_LOG = "Wikipedia Scraper >= Process {}/{} languages scraped >> Current Language: {}";
+    private static final String TASK_LOG = SINGLE_LANGUAGE_TASK_LOG.formatted("Wikipedia Task");
 
     @Override
-    @PostConstruct
     public void doScrapData() {
         log.info("Wikipedia task started");
 
         try(BrowserClient browserClient = new BrowserClient()) {
-            List<DoneLanguage> languagesToSave = new ArrayList<>(defaultLanguagesList.size());
-
             int languagesAmount = (defaultLanguagesList.size() + customLanguagesList.size());
             int index = 0;
 
+            List<DoneLanguage> languagesToSave = new ArrayList<>(defaultLanguagesList.size());
+
             for(String languageName: defaultLanguagesList) {
-                log.info(SINGLE_LANGUAGE_LOG, (++index), languagesAmount, languageName);
+                log.info(TASK_LOG, (++index), languagesAmount, languageName);
 
                 browserClient.loadPage(format(defaultSitePattern, languageName));
                 languagesToSave.add(getLanguageFromPage(browserClient, languageName));
             }
 
             for(var customLanguage: customLanguagesList) {
-                log.info(SINGLE_LANGUAGE_LOG, (++index), languagesAmount, customLanguage.name());
+                log.info(TASK_LOG, (++index), languagesAmount, customLanguage.name());
 
                 browserClient.loadPage(customLanguage.site());
                 languagesToSave.add(getLanguageFromPage(browserClient, customLanguage));

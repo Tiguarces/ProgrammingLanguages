@@ -75,7 +75,7 @@ public final class LanguageTrendsParser implements Parser<DoneLanguageTrend, Fie
 
     private static final String GITHUB_LINK = "https://github.com/";
     private static String parseLink(final String link) {
-        return GITHUB_LINK + ScrapingUtils.removeSpaces(link, "/");
+        return GITHUB_LINK + ScrapingUtils.removeSpaces(link, FORWARD_SLASH);
     }
 
     public enum FieldName {

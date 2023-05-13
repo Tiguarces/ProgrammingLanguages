@@ -8,7 +8,6 @@ import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser.DoneLanguageTrend;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser.FieldName;
 import com.Tiguarces.ProgrammingLanguages.service.trends.LanguageTrendsService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -39,7 +38,6 @@ public final class LanguageTrendsTask implements Task {
     private static final String REPOSITORY_BOX = trendsScraping.repositoriesBox();
 
     @Override
-    @PostConstruct
     public void doScrapData() {
         log.info("LanguageTrends task started");
 

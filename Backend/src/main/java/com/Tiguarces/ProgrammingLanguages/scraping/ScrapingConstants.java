@@ -15,6 +15,7 @@ public final class ScrapingConstants {
     public static final char s_CHAR = 's';
 
     public static final String SEMICOLON = ";";
+    public static final String FORWARD_SLASH = "/";
 
     /// Browser
     public static final String P_TAG = "p";

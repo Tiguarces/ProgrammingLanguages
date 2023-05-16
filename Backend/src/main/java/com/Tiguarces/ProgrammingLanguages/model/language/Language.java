@@ -54,12 +54,10 @@ public class Language {
     @Column(name = "FirstAppeared", nullable = false)
     private int firstAppeared;
 
-    @OneToMany(orphanRemoval = true, cascade = ALL)
-    @JoinColumn(name = "TiobeId", referencedColumnName = "LanguageId")
+    @OneToMany(orphanRemoval = true, cascade = ALL, mappedBy = "language")
     private List<TiobeIndex> tiobeIndexList;
 
-    @OneToMany(orphanRemoval = true, cascade = ALL)
-    @JoinColumn(name = "TrendId", referencedColumnName = "LanguageId")
+    @OneToMany(orphanRemoval = true, cascade = ALL, mappedBy = "language")
     private List<LanguageTrend> languageTrends;
 
     public static Language toEntity(final LanguageParser.DoneLanguage doneLanguage) {

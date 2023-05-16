@@ -35,7 +35,13 @@
         {
           "name": "TypeScript",
           "site": "https://en.wikipedia.org/wiki/TypeScript",
-          "thumbnailPath": null,
+          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1200px-Typescript_logo_2020.svg.png",
+          "website": null
+        },
+        {
+          "name": "JavaScript",
+          "site": null,
+          "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/800px-JavaScript-logo.png",
           "website": null
         }
       ]

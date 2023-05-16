@@ -18,6 +18,9 @@ import static com.Tiguarces.ProgrammingLanguages.scraping.ScrapingConstants.*;
 import static com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser.DoneLanguageTrend;
 import static com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser.FieldName;
 import static com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser.FieldName.*;
+import static java.util.Collections.emptyList;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Component
 @RequiredArgsConstructor
@@ -41,28 +44,29 @@ public final class LanguageTrendsParser implements Parser<DoneLanguageTrend, Fie
 
     @Override
     public List<LanguageTrend> parseToEntity(final List<DoneLanguageTrend> trendsToParse) {
-        List<LanguageTrend> doneTrends = new LinkedList<>();
+        if(isEmpty(trendsToParse)) {
+            return emptyList();
+        }
 
         LocalDate today = LocalDate.now();
-        Language foundLanguage;
+        List<LanguageTrend> doneTrends = new LinkedList<>();
+        Language foundLanguage = languageService.findByName(trendsToParse.get(0).languageName())
+                                                .orElseThrow();
 
-        for(var trendToParse : Objects.requireNonNull(trendsToParse)) {
-            foundLanguage = languageService.findByName(trendToParse.languageName())
-                                           .orElseThrow();
-
+        for(var trendToParse : trendsToParse) {
             doneTrends.add(LanguageTrend.toEntity(trendToParse, today, foundLanguage));
-        } return doneTrends;
+        } foundLanguage.setLanguageTrends(doneTrends);  return doneTrends;
     }
 
-    private static double parseStars(final String value) {
+    private static int parseStars(final String value) {
         try {
             Matcher matcher;
             if((matcher = DECIMAL_PATTERN.matcher(value)).find()) {
                 String foundValue = matcher.group();
 
                 return (foundValue.indexOf(COMMA_CHAR) != -1)
-                         ? Double.parseDouble((foundValue.replace(COMMA_CHAR, DOT_CHAR)).trim())
-                         : Double.parseDouble(foundValue.trim());
+                         ? Integer.parseInt((foundValue.replaceFirst(COMMA, EMPTY)).trim())
+                         : Integer.parseInt(foundValue.trim());
 
             } else {
                 throw new IllegalArgumentException("Cannot parse number of stars to Integer >> Cause: not found digits");
@@ -84,6 +88,6 @@ public final class LanguageTrendsParser implements Parser<DoneLanguageTrend, Fie
     }
 
     public record DoneLanguageTrend(String languageName, String repositoryName, String linkToRepository,
-                                    String description, double totalStars, double monthlyStars, LocalDate trendsDate) {
+                                    String description, int totalStars, int monthlyStars, LocalDate trendsDate) {
     }
 }

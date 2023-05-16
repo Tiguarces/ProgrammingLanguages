@@ -32,16 +32,16 @@ public class LanguageTrend {
     private String linkToRepository;
 
     @Column(name = "TotalStars", nullable = false)
-    private double totalStars;
+    private int totalStars;
 
     @Column(name = "MonthlyStars", nullable = false)
-    private double monthlyStars;
+    private int monthlyStars;
 
     @Column(name = "TrendsDate", nullable = false)
     private LocalDate trendsDate;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "LanguageId", referencedColumnName = "LanguageId")
+    @JoinColumn(name = "LanguageId")
     private Language language;
 
     public static LanguageTrend toEntity(final LanguageTrendsParser.DoneLanguageTrend doneLanguageTrend, final LocalDate trendDate, final Language language) {

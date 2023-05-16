@@ -36,6 +36,6 @@ public class TiobeIndex {
     private TiobeStatus status = TiobeStatus.NEUTRAL;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "LanguageId", referencedColumnName = "LanguageId")
+    @JoinColumn(name = "LanguageId")
     private Language language;
 }

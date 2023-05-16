@@ -11,11 +11,12 @@ public final class ScrapingConstants {
     // Common
     public static final char SEMICOLON_CHAR = ';';
     public static final char COMMA_CHAR = ',';
-    public static final char DOT_CHAR = '.';
     public static final char s_CHAR = 's';
 
+    public static final String COMMA = ",";
     public static final String SEMICOLON = ";";
     public static final String FORWARD_SLASH = "/";
+    public static final String HTTPS = "https://";
 
     /// Browser
     public static final String P_TAG = "p";

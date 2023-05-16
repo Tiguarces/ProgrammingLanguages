@@ -90,10 +90,14 @@ public final class LanguageParser implements Parser<DoneLanguage, FieldName, Lan
     }
 
     private String parseWebsite(final String website, final Object customPage) {
+        if(customPage == null) {
+            return null;
+        }
+
         if(customPage instanceof LanguageConfig.Enabled.CustomLanguage otherLanguage) {
             return (isBlank(website))
                      ? otherLanguage.website() : website;
-        } else return website;
+        } else return (HTTPS + website);
     }
 
     public enum FieldName {

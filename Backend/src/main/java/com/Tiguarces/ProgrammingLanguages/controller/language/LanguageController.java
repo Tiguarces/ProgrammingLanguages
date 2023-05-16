@@ -1,6 +1,7 @@
 package com.Tiguarces.ProgrammingLanguages.controller.language;
 
 import com.Tiguarces.ProgrammingLanguages.controller.language.dto.LanguageDTO;
+import com.Tiguarces.ProgrammingLanguages.controller.language.dto.LanguageDetailsDTO;
 import com.Tiguarces.ProgrammingLanguages.service.language.LanguageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,7 +48,7 @@ public class LanguageController implements ControllerTemplate {
     @GetMapping(path = "/get")
     @Operation(summary = "Retrieve specified language by name", tags = { GET, BY_NAME })
     @ApiResponses({
-            @ApiResponse(responseCode = OK_STATUS          , content = { @Content(schema = @Schema(implementation = LanguageDTO.class), mediaType = APPLICATION_JSON ) }),
+            @ApiResponse(responseCode = OK_STATUS          , content = { @Content(schema = @Schema(implementation = LanguageDetailsDTO.class), mediaType = APPLICATION_JSON ) }),
             @ApiResponse(responseCode = NOT_FOUND_STATUS   , content = { @Content(schema = @Schema()) }, description = "When Language has not been found"),
             @ApiResponse(responseCode = SERVER_ERROR_STATUS, content = { @Content(schema = @Schema()) }, description = "When any problem occurs")
     })

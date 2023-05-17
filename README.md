@@ -3,6 +3,17 @@
 <p> Fullstack application which scrap data from the pages like: TiobeIndex, Wikipedia and Github trends.
   To scraping data application uses Selenium with Jsoup to parse data, entities are created by SQL migrations </p>
 
+![alt text](images/mainComponent.png)
+
+# Selected language
+### Description
+
+![alt text](images/langExample.png)
+
+### Trends
+
+![alt text](images/langExample2.png)
+
 ## Stack Technology:
 | Technology       | Additional Info    |
 | -----------------| -------------------|
@@ -24,7 +35,9 @@
 <p> 1) <b>To run Backend</b> firstly you have to download on your compuer Browser (Chromium) and complected chromedriver </p>
 <p> 2) 
   The next step is changing in application.yml two properties to your paths <p>
-  img
+    
+  ![alt text](images/yamlProperties.png)
+    
 <p> (3) And that is all, you can run backend </p>
 
 </br>

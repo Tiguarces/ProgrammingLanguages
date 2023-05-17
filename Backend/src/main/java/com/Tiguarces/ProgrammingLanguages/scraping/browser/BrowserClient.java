@@ -9,7 +9,6 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.util.CollectionUtils;
 
 import java.io.Closeable;
 import java.io.OutputStream;
@@ -20,7 +19,7 @@ import java.util.Objects;
 import static com.Tiguarces.ProgrammingLanguages.scraping.ScrapingConstants.*;
 import static com.Tiguarces.ProgrammingLanguages.scraping.browser.BrowserConstants.*;
 import static java.time.temporal.ChronoUnit.SECONDS;
-import static org.springframework.util.CollectionUtils.*;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Slf4j
 public final class BrowserClient implements Closeable {

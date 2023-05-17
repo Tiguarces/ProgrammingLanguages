@@ -1,6 +1,7 @@
 package com.Tiguarces.ProgrammingLanguages.model.tiobe;
 
 import com.Tiguarces.ProgrammingLanguages.model.language.Language;
+import com.Tiguarces.ProgrammingLanguages.scraping.parser.TiobeIndexParser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class TiobeIndex {
     @Id
     @Column(name = "TiobeId")
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "Rank", nullable = false)
     private int rank;
@@ -38,4 +39,13 @@ public class TiobeIndex {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "LanguageId")
     private Language language;
+
+    public static TiobeIndex toEntity(final TiobeIndexParser.DoneTiobeIndex tiobeIndexToParse, final LocalDate trendDate, final Language language) {
+        return new TiobeIndex(null,
+                tiobeIndexToParse.rank(),
+                trendDate,
+                tiobeIndexToParse.status(),
+                language
+        );
+    }
 }

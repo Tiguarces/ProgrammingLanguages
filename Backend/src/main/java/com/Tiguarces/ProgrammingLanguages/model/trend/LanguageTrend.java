@@ -37,6 +37,9 @@ public class LanguageTrend {
     @Column(name = "MonthlyStars", nullable = false)
     private int monthlyStars;
 
+    @Column(name = "Description")
+    private String description;
+
     @Column(name = "TrendsDate", nullable = false)
     private LocalDate trendsDate;
 
@@ -50,6 +53,7 @@ public class LanguageTrend {
                 doneLanguageTrend.linkToRepository(),
                 doneLanguageTrend.totalStars(),
                 doneLanguageTrend.monthlyStars(),
+                doneLanguageTrend.description(),
                 trendDate,
                 language
         );

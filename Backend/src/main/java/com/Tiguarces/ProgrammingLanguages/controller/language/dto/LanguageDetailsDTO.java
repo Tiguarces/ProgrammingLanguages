@@ -15,12 +15,18 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public record LanguageDetailsDTO(String name, String paradigms, String fileExtensions,
                                  String stableRelease, String description, String website,
                                  String implementations, String thumbnailPath, int firstAppeared,
-                                 Integer tiobeIndex, List<LanguageTrendDTO> trendsList) {
+                                 TiobeIndexStatus tiobeIndex, List<LanguageTrendDTO> trendsList) {
+
+    private record TiobeIndexStatus(Integer rank, int status) {
+        public static TiobeIndexStatus map(final TiobeIndex tiobeIndex) {
+            return new TiobeIndexStatus(tiobeIndex.getRank(), tiobeIndex.getStatus().getValue());
+        }
+    }
 
     public static LanguageDetailsDTO mapToDTO(final Language language) {
         Objects.requireNonNull(language);
 
-        var tiobeIndex = getTiobeRank(language.getTiobeIndexList());
+        var tiobeIndex = getNewestTiobeIndex(language.getTiobeIndexList());
         var doneTrends = getTrends(language.getLanguageTrends());
 
         return new LanguageDetailsDTO(replaceToSharpSign(language.getName()), language.getParadigms(), language.getFileExtensions(),
@@ -28,12 +34,12 @@ public record LanguageDetailsDTO(String name, String paradigms, String fileExten
                                       language.getThumbnailPath(), language.getFirstAppeared(), tiobeIndex, doneTrends);
     }
 
-    private static Integer getTiobeRank(final List<TiobeIndex> languageTiobeIndexes) {
+    private static TiobeIndexStatus getNewestTiobeIndex(final List<TiobeIndex> languageTiobeIndexes) {
         return Objects.requireNonNull(languageTiobeIndexes)
                       .stream()
                       .min(Comparator.comparing(TiobeIndex::getIndexDate)
                                      .thenComparing(TiobeIndex::getRank))
-                      .map(TiobeIndex::getRank).orElse(null);
+                      .map(TiobeIndexStatus::map).orElse(null);
     }
 
     private static List<LanguageTrendDTO> getTrends(final List<LanguageTrend> languageTrends) {

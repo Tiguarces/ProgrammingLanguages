@@ -9,7 +9,7 @@ main {
 }
 
 #list {
-  margin-top: 3%;
+  margin-top: 2.5%;
   width: 90vw;
   height: auto;
   min-height: 50vh;
@@ -44,7 +44,7 @@ main {
 }
 
 .lang > img {
-  max-height: 90%;
+  max-height: 60%;
   max-width: 100%;
 }
 

@@ -1,5 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { faGithub, faGithubAlt, faGithubSquare, faSquareGithub } from '@fortawesome/free-brands-svg-icons';
+import { ActivatedRoute } from '@angular/router';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faGithub, faGithubAlt, faGithubSquare, faLine, faSquareGithub } from '@fortawesome/free-brands-svg-icons';
+import { faArrowTurnDown, faArrowTurnUp } from '@fortawesome/free-solid-svg-icons';
+import { map } from 'rxjs';
+import { LanguageService } from 'src/app/api/language.service';
+import { LanguageDetails } from 'src/app/api/model/LanguageDetails';
+import { TiobeStatus } from 'src/app/api/model/TiobeStatus';
 
 @Component({
   selector: 'app-lang',
@@ -9,6 +16,19 @@ import { faGithub, faGithubAlt, faGithubSquare, faSquareGithub } from '@fortawes
 export class LangComponent {
 
   public githubIcon = faGithub;
+  public upIcon = faArrowTurnUp;
+  public downIcon = faArrowTurnDown;
+
+  public details: LanguageDetails = {} as LanguageDetails;
+
+  public globalTiobeStatus = TiobeStatus;
+
+  constructor(languageService: LanguageService, route: ActivatedRoute) {
+    let languageName = route.snapshot.params['name'];
+
+    languageService.getDetails(languageName)
+                   .subscribe(details => this.details = details);
+  }
 
   @ViewChild("description")
   private descriptionElement: ElementRef = {} as ElementRef;

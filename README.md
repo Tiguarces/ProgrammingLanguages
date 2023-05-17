@@ -10,6 +10,8 @@
 
 ![alt text](images/langExample.png)
 
+![alt text](images/langExample3.png)
+
 ### Trends
 
 ![alt text](images/langExample2.png)

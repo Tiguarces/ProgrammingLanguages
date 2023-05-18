@@ -39,8 +39,9 @@
   The next step is changing in application.yml two properties to your paths <p>
     
   ![alt text](images/yamlProperties.png)
-    
-<p> (3) And that is all, you can run backend </p>
+   
+<p> 3) Change also database properties to yours</p>
+<p> 4) And that is all, you can run backend </p>
 
 </br>
 <p> 1) <b>To run Frontend</b> you need go to frontend directory and run this command: npm install </p>

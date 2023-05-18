@@ -34,7 +34,7 @@
 
 ## Running
 
-<p> 1) <b>To run Backend</b> firstly you have to download on your compuer Browser (Chromium) and complected chromedriver </p>
+<p> 1) <b>To run Backend</b> firstly you have to download on your compuer Browser (Chromium) and correct chromedriver </p>
 <p> 2) 
   The next step is changing in application.yml two properties to your paths <p>
     

@@ -3,8 +3,8 @@ package com.Tiguarces.ProgrammingLanguages.scraping.parser;
 import com.Tiguarces.ProgrammingLanguages.model.language.Language;
 import com.Tiguarces.ProgrammingLanguages.model.tiobe.TiobeIndex;
 import com.Tiguarces.ProgrammingLanguages.model.tiobe.TiobeStatus;
+import com.Tiguarces.ProgrammingLanguages.scraping.loader.ConfigurationLoader;
 import com.Tiguarces.ProgrammingLanguages.service.language.LanguageService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -21,10 +21,16 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Component
-@RequiredArgsConstructor
 public final class TiobeIndexParser implements Parser<DoneTiobeIndex, FieldName, TiobeIndex> {
 
     private final LanguageService languageService;
+    private final EnumMap<TiobeStatus, String> statusMap;
+
+    public TiobeIndexParser(final LanguageService languageService, final ConfigurationLoader configurationLoader) {
+        this.languageService = languageService;
+        this.statusMap = configurationLoader.tiobeIndexTask
+                                            .scraping().status();
+    }
 
     @Override
     public DoneTiobeIndex parse(final EnumMap<FieldName, Object> dataToParse) {
@@ -79,22 +85,16 @@ public final class TiobeIndexParser implements Parser<DoneTiobeIndex, FieldName,
     }
 
 
-    private static TiobeStatus getStatus(final Object value) {
+    private TiobeStatus getStatus(final Object value) {
         try {
             String parsedValue = value.toString();
 
-            if (containsIgnoreCase(parsedValue, "/up.png")) {
-                return TiobeStatus.UP;
-
-            } else if (containsIgnoreCase(parsedValue, "/upup.png")) {
-                return TiobeStatus.SUPER_UP;
-
-            } else if (containsIgnoreCase(parsedValue, "/down.png")) {
-                return TiobeStatus.DOWN;
-
-            } else if (containsIgnoreCase(parsedValue, "/downdown.png")) {
-                return TiobeStatus.SUPER_DOWN;
+            for(var entry: statusMap.entrySet()) {
+                if(containsIgnoreCase(parsedValue, entry.getValue())) {
+                    return entry.getKey();
+                }
             }
+
         } catch (Exception ignored) {
         } return TiobeStatus.NEUTRAL;
     }

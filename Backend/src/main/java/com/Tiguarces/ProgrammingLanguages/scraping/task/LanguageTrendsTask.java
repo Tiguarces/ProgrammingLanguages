@@ -1,6 +1,7 @@
 package com.Tiguarces.ProgrammingLanguages.scraping.task;
 
 import com.Tiguarces.ProgrammingLanguages.scraping.browser.BrowserClient;
+import com.Tiguarces.ProgrammingLanguages.scraping.browser.BrowserConstants;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.ConfigurationLoader;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.LanguageConfig;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.TaskConfig;
@@ -8,7 +9,6 @@ import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser.DoneLanguageTrend;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.LanguageTrendsParser.FieldName;
 import com.Tiguarces.ProgrammingLanguages.service.trends.LanguageTrendsService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -20,28 +20,46 @@ import static java.lang.String.format;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public final class LanguageTrendsTask implements Task {
     private final LanguageTrendsParser trendsParser;
     private final LanguageTrendsService trendsService;
 
-    private static final TaskConfig.Trends trendsTask = ConfigurationLoader.trendsTask;
-    private static final TaskConfig.Trends.Scraping trendsScraping = trendsTask.scraping();
-    private static final TaskConfig.Trends.Scraping.SingleRepository singleRepository = trendsScraping.singleRepository();
-    private static final Map<String, String> customLanguagesPhrases = trendsScraping.customLanguagePhrases();
+    public LanguageTrendsTask(final LanguageTrendsParser trendsParser, final LanguageTrendsService trendsService,
+                              final ConfigurationLoader configurationLoader, final BrowserConstants browserConstants) {
 
-    private static final LanguageConfig.Enabled enabledLanguages = ConfigurationLoader.enabledLanguages;
-    private static final List<String> defaultLanguagesList = enabledLanguages.defaultPages();
-    private static final List<LanguageConfig.Enabled.CustomLanguage> customLanguagesList = enabledLanguages.customPages();
+        this.trendsParser = trendsParser;
+        this.trendsService = trendsService;
 
-    private static final String TASK_LOG = SINGLE_LANGUAGE_TASK_LOG.formatted("LanguageTrends task");
-    private static final String REPOSITORY_BOX = trendsScraping.repositoriesBox();
+        this.trendsTask = configurationLoader.trendsTask;
+        var trendsScraping = trendsTask.scraping();
+        this.singleRepository = trendsScraping.singleRepository();
+
+        this.enabledLanguages = configurationLoader.enabledLanguages;
+        this.customLanguagesPhrases = trendsScraping.customLanguagePhrases();
+        this.defaultLanguagesList = enabledLanguages.defaultPages();
+        this.customLanguagesList = enabledLanguages.customPages();
+        this.repositoryBox = trendsScraping.repositoriesBox();
+
+        this.browserConstants = browserConstants;
+    }
+
+    private final TaskConfig.Trends trendsTask;
+    private final BrowserConstants browserConstants;
+    private final TaskConfig.Trends.Scraping.SingleRepository singleRepository;
+    private final Map<String, String> customLanguagesPhrases;
+
+    private final LanguageConfig.Enabled enabledLanguages;
+    private final List<String> defaultLanguagesList;
+    private final List<LanguageConfig.Enabled.CustomLanguage> customLanguagesList;
+
+    private final String TASK_LOG = SINGLE_LANGUAGE_TASK_LOG.formatted("LanguageTrends task");
+    private final String repositoryBox;
 
     @Override
     public void doScrapData() {
         log.info("LanguageTrends task started");
 
-        try(BrowserClient browserClient = new BrowserClient()) {
+        try(BrowserClient browserClient = new BrowserClient(browserConstants)) {
             int languagesAmount = (defaultLanguagesList.size() + customLanguagesList.size());
             Map<String, List<DoneLanguageTrend>> trendsToSave = new HashMap<>(languagesAmount);
 
@@ -81,7 +99,7 @@ public final class LanguageTrendsTask implements Task {
     private List<DoneLanguageTrend> getTrendsFromPage(final BrowserClient browserClient, final String languageName) {
         List<DoneLanguageTrend> trends = new ArrayList<>();
 
-        for(var singleTrend: browserClient.findElements(REPOSITORY_BOX + singleRepository.box())) {
+        for(var singleTrend: browserClient.findElements(repositoryBox + singleRepository.box())) {
             var dataToParse = new EnumMap<>(FieldName.class);
                 dataToParse.put(LANGUAGE_NAME       , languageName);
                 dataToParse.put(REPOSITORY_NAME     , browserClient.selectElementAndGetValue(singleTrend, singleRepository.name()));

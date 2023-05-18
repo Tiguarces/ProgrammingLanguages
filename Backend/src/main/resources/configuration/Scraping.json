@@ -2,7 +2,7 @@
   "languages": {
     "enabled": {
       "defaultSite": "https://en.wikipedia.org/wiki/%s_(programming_language)",
-      "defaultPages": [ "Python", "C", "Java", "C++", "C_Sharp", "JavaScript",
+      "defaultPages": [ "Python", "C", "Java", "C++", "C_Sharp",
                         "PHP", "Go", "Matlab", "R", "Ruby", "Rust",
                         "Swift", "Perl", "F_Sharp", "Lisp", "Lua",
                         "Haskell", "Julia", "Groovy", "Kotlin", "Dart",
@@ -40,7 +40,7 @@
         },
         {
           "name": "JavaScript",
-          "site": null,
+          "site": "https://en.wikipedia.org/wiki/JavaScript_(programming_language)",
           "thumbnailPath": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/800px-JavaScript-logo.png",
           "website": null
         }
@@ -65,6 +65,13 @@
         "mainLanguagesBox": "table#top20 tbody",
         "otherLanguagesBox": "table#otherPL tbody",
         "singleRow": "tr",
+
+        "status": {
+          "UP": "/up.png",
+          "SUPER_UP": "/upup.png",
+          "DOWN": "/down.png",
+          "SUPER_DOWN": "/downdown.png"
+        },
 
         "fieldPositions": {
           "mainLanguages": {

@@ -11,12 +11,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Configuration
 @SuppressWarnings("unused")
 public class ConfigurationLoader {
-    public static LanguageConfig.Enabled enabledLanguages;
-    public static LanguageConfig.Disabled disabledLanguages;
+    public LanguageConfig.Enabled enabledLanguages;
+    public LanguageConfig.Disabled disabledLanguages;
 
-    public static TaskConfig.TiobeIndex tiobeIndexTask;
-    public static TaskConfig.Wikipedia wikipediaTask;
-    public static TaskConfig.Trends trendsTask;
+    public TaskConfig.TiobeIndex tiobeIndexTask;
+    public TaskConfig.Wikipedia wikipediaTask;
+    public TaskConfig.Trends trendsTask;
 
     public ConfigurationLoader() {
         log.info("Loading and initializing configuration file");
@@ -26,13 +26,13 @@ public class ConfigurationLoader {
             ConfigurationFile configurationFile = objectMapper.readValue(getFileAsString(), ConfigurationFile.class);
 
             LanguageConfig languageConfig = configurationFile.languages();
-            ConfigurationLoader.enabledLanguages = languageConfig.enabled();
-            ConfigurationLoader.disabledLanguages = languageConfig.disabled();
+            this.enabledLanguages = languageConfig.enabled();
+            this.disabledLanguages = languageConfig.disabled();
 
             TaskConfig taskConfig = configurationFile.tasks();
-            ConfigurationLoader.tiobeIndexTask = taskConfig.tiobeIndex();
-            ConfigurationLoader.wikipediaTask = taskConfig.wikipedia();
-            ConfigurationLoader.trendsTask = taskConfig.trends();
+            this.tiobeIndexTask = taskConfig.tiobeIndex();
+            this.wikipediaTask = taskConfig.wikipedia();
+            this.trendsTask = taskConfig.trends();
 
         } catch (Exception exception) {
             log.error("Fail while loading ConfigurationFile >> Message: " + exception.getMessage());  return;

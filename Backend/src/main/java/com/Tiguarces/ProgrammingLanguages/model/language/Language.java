@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -74,5 +75,33 @@ public class Language {
                 Collections.emptyList(),
                 Collections.emptyList()
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Language language = (Language) o;
+        return Objects.equals(name, language.name)                          &&
+               Objects.equals(paradigms, language.paradigms)                &&
+               Objects.equals(fileExtensions, language.fileExtensions)      &&
+               Objects.equals(stableRelease, language.stableRelease)        &&
+               Objects.equals(description, language.description)            &&
+               Objects.equals(website, language.website)                    &&
+               Objects.equals(implementations, language.implementations)    &&
+               Objects.equals(thumbnailPath, language.thumbnailPath)        &&
+               firstAppeared == language.firstAppeared;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, paradigms, fileExtensions, stableRelease, description, website, implementations, thumbnailPath, firstAppeared);
     }
 }

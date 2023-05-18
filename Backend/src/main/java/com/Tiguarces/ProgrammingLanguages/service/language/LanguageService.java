@@ -22,7 +22,28 @@ public class LanguageService implements ServiceTemplate {
     @Override
     public void saveAll(final List<Language> doneLanguages) {
         Objects.requireNonNull(doneLanguages);
-        languageRepository.saveAll(doneLanguages);
+
+        Optional<Language> foundLanguage;
+        for(var language: doneLanguages) {
+            if((foundLanguage = languageRepository.findByName(language.getName())).isPresent()) {
+                checkLanguage(foundLanguage.get(), language);
+            } else {
+                languageRepository.save(language);
+            }
+        }
+    }
+
+    private void checkLanguage(final Language foundLanguage, final Language languageToSave) {
+        if(!foundLanguage.equals(languageToSave)) { // Then update data
+            foundLanguage.setParadigms(languageToSave.getParadigms());
+            foundLanguage.setFileExtensions(languageToSave.getFileExtensions());
+            foundLanguage.setStableRelease(languageToSave.getStableRelease());
+            foundLanguage.setDescription(languageToSave.getDescription());
+            foundLanguage.setWebsite(languageToSave.getWebsite());
+            foundLanguage.setImplementations(languageToSave.getImplementations());
+            foundLanguage.setThumbnailPath(languageToSave.getThumbnailPath());
+            foundLanguage.setFirstAppeared(languageToSave.getFirstAppeared());
+        }
     }
 
     @Override

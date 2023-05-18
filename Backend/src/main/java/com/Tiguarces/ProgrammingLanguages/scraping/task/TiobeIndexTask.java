@@ -1,15 +1,14 @@
 package com.Tiguarces.ProgrammingLanguages.scraping.task;
 
 import com.Tiguarces.ProgrammingLanguages.scraping.browser.BrowserClient;
+import com.Tiguarces.ProgrammingLanguages.scraping.browser.BrowserConstants;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.ConfigurationLoader;
-import com.Tiguarces.ProgrammingLanguages.scraping.loader.LanguageConfig;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.LanguageConfig.Enabled.CustomLanguage;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.TaskConfig;
 import com.Tiguarces.ProgrammingLanguages.scraping.loader.TaskConfig.TiobeIndex.FieldPositions.FieldPosition;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.TiobeIndexParser;
 import com.Tiguarces.ProgrammingLanguages.scraping.parser.TiobeIndexParser.DoneTiobeIndex;
 import com.Tiguarces.ProgrammingLanguages.service.tiobe.TiobeService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -29,26 +28,41 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public final class TiobeIndexTask implements Task {
 
-    private final TiobeService tiobeService;
     private final TiobeIndexParser tiobeParser;
+    private final TiobeService tiobeService;
 
-    private static final LanguageConfig.Enabled enabledLanguages = ConfigurationLoader.enabledLanguages;
-    private static final TaskConfig.TiobeIndex tiobeIndexTask = ConfigurationLoader.tiobeIndexTask;
-    private static final TaskConfig.TiobeIndex.Scraping scraping = tiobeIndexTask.scraping();
-    private static final TaskConfig.TiobeIndex.FieldPositions fieldPositions = scraping.fieldPositions();
+    public TiobeIndexTask(final TiobeIndexParser tiobeParser, final TiobeService tiobeService,
+                          final ConfigurationLoader configurationLoader, final BrowserConstants browserConstants) {
 
-    private static final List<String> defaultLanguagesList = enabledLanguages.defaultPages();
-    private static final List<String> customLanguagesList = (enabledLanguages.customPages())
-                                                                             .stream().map(CustomLanguage::name).toList();
+        this.tiobeParser = tiobeParser;
+        this.tiobeService = tiobeService;
+
+        var enabledLanguages = configurationLoader.enabledLanguages;
+        this.tiobeIndexTask = configurationLoader.tiobeIndexTask;
+        this.scraping = tiobeIndexTask.scraping();
+        this.fieldPositions = scraping.fieldPositions();
+
+        this.browserConstants = browserConstants;
+        this.defaultLanguagesList = enabledLanguages.defaultPages();
+        this.customLanguagesList = (enabledLanguages.customPages())
+                                                    .stream().map(CustomLanguage::name).toList();
+    }
+
+    private final TaskConfig.TiobeIndex tiobeIndexTask;
+    private final TaskConfig.TiobeIndex.Scraping scraping;
+    private final TaskConfig.TiobeIndex.FieldPositions fieldPositions;
+    private final BrowserConstants browserConstants;
+
+    private final List<String> defaultLanguagesList;
+    private final List<String> customLanguagesList;
 
     @Override
     public void doScrapData() {
         log.info("TiobeIndex task started");
 
-        try(BrowserClient browserClient = new BrowserClient()) {
+        try(BrowserClient browserClient = new BrowserClient(browserConstants)) {
             List<DoneTiobeIndex> doneIndexes = new ArrayList<>(defaultLanguagesList.size());
 
             browserClient.loadPage(tiobeIndexTask.site());

@@ -41,3 +41,5 @@ custom:
   chromium:
     binary: /usr/bin/chromium
     driver: /usr/bin/chromedriver
+  task:
+    cron: 30 12 5 * * *

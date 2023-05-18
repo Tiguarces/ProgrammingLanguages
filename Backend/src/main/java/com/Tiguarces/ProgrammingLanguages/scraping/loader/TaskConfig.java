@@ -1,5 +1,7 @@
 package com.Tiguarces.ProgrammingLanguages.scraping.loader;
 
+import com.Tiguarces.ProgrammingLanguages.model.tiobe.TiobeStatus;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -7,7 +9,7 @@ public record TaskConfig(TiobeIndex tiobeIndex, Wikipedia wikipedia, Trends tren
 
     public record TiobeIndex(String site, Scraping scraping) {
         public record Scraping(String mainLanguagesBox, String otherLanguagesBox,
-                               String singleRow, FieldPositions fieldPositions) { }
+                               String singleRow, EnumMap<TiobeStatus, String> status, FieldPositions fieldPositions) { }
 
         public record FieldPositions(EnumMap<FieldPosition, Short> mainLanguages,
                                      EnumMap<FieldPosition, Short> otherLanguages) {

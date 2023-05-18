@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -18,6 +19,24 @@ public class LanguageTrendsService implements ServiceTemplate {
     @Override
     public void saveAll(final List<LanguageTrend> doneTrends) {
         Objects.requireNonNull(doneTrends);
-        trendRepository.saveAll(doneTrends);
+
+        Optional<LanguageTrend> foundTrend;
+        for(var trend: doneTrends) {
+            if((foundTrend = trendRepository.findByRepositoryName(trend.getRepositoryName())).isPresent()) {
+                checkTrend(foundTrend.get(), trend);
+            } else {
+                trendRepository.save(trend);
+            }
+        }
+    }
+
+    private void checkTrend(final LanguageTrend foundTrend, final LanguageTrend trendToSave) {
+        if(!foundTrend.equals(trendToSave)) { // Then update data
+            foundTrend.setTrendsDate(trendToSave.getTrendsDate());
+            foundTrend.setLinkToRepository(trendToSave.getLinkToRepository());
+            foundTrend.setTotalStars(trendToSave.getTotalStars());
+            foundTrend.setMonthlyStars(trendToSave.getMonthlyStars());
+            foundTrend.setDescription(trendToSave.getDescription());
+        }
     }
 }

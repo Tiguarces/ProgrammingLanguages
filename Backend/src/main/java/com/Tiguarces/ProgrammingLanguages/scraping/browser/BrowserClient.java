@@ -1,6 +1,5 @@
 package com.Tiguarces.ProgrammingLanguages.scraping.browser;
 
-import com.Tiguarces.ProgrammingLanguages.scraping.loader.ConfigurationLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.Tiguarces.ProgrammingLanguages.scraping.ScrapingConstants.*;
-import static com.Tiguarces.ProgrammingLanguages.scraping.browser.BrowserConstants.*;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -27,16 +25,16 @@ public final class BrowserClient implements Closeable {
     private final ChromeDriverService browserService;
     private Document websiteDocument;
 
-    public BrowserClient() {
+    public BrowserClient(final BrowserConstants browserConstants) {
         log.info(BROWSER_LOGS.get(1));
-        System.setProperty(DRIVER_SYSTEM_PROPERTY, DRIVER_BINARY);
+        System.setProperty(browserConstants.DRIVER_SYSTEM_PROPERTY, browserConstants.DRIVER_BINARY);
 
         browserService = ChromeDriverService.createDefaultService();
         browserService.sendOutputTo(OutputStream.nullOutputStream());
 
         ChromeOptions options = new ChromeOptions();
-                      options.addArguments(ARGUMENTS);
-                      options.setBinary(BINARY);
+                      options.addArguments(browserConstants.ARGUMENTS);
+                      options.setBinary(browserConstants.BINARY);
 
         browserClient = new ChromeDriver(options);
         browserClient.manage()
@@ -52,8 +50,6 @@ public final class BrowserClient implements Closeable {
         browserClient.get(url);
         websiteDocument = Jsoup.parse(browserClient.getPageSource());
     }
-
-    private static final String WIKIPEDIA_DESCRIPTION_SELECTOR = ConfigurationLoader.wikipediaTask.description();
 
     public List<Element> findElements(final String selector) {
         return websiteDocument.select(Objects.requireNonNull(selector));
@@ -82,38 +78,47 @@ public final class BrowserClient implements Closeable {
                 return currentElement.attr(HREF_ATTR);
             }
 
-            if(selector.equals(WIKIPEDIA_DESCRIPTION_SELECTOR)) {
-                Elements children = foundElement.get(0).nextElementSiblings();
-                StringBuilder descriptionBuilder = new StringBuilder();
-                String tagName;
+            return currentElement.text();
 
-                for (Element child : children) {
-                    currentElement = child;
-                    descriptionBuilder.append(currentElement.text())
-                                      .append(NEW_HTML_LINE);
+        } else return null;
+    }
 
-                    if(((tagName = currentElement.tagName()).equals(UL_TAG)) || tagName.equals(OL_TAG)) {
-                        var listOfLi = currentElement.select(LI_TAG);
-                        int liAmount = listOfLi.size();
+    public String findWikipediaDescription(final String selector) {
+        Elements foundElement = websiteDocument.select(selector);
 
-                        descriptionBuilder.append(UL_HTML_OPEN_TAG);
+        if(!foundElement.isEmpty()) {
+            Element currentElement;
+            Elements children = foundElement.get(0).nextElementSiblings();
 
-                        for (int i = 0; i < liAmount; i++) {
-                            if(i == 0 && (i != liAmount - 1)) {
-                                descriptionBuilder.append(NEW_HTML_LINE);
-                            }
-                            descriptionBuilder.append(LI_HTML_OPEN_TAG)
-                                              .append((listOfLi.get(i)).text())
-                                              .append(LI_HTML_CLOSE_TAG);
+            StringBuilder descriptionBuilder = new StringBuilder();
+            String tagName;
 
-                        } descriptionBuilder.append(UL_HTML_CLOSE_TAG);
+            for (Element child : children) {
+                currentElement = child;
+                descriptionBuilder.append(currentElement.text())
+                        .append(NEW_HTML_LINE);
 
-                    } else if(!tagName.equals(P_TAG)) {
-                        break;
+                if (((tagName = currentElement.tagName()).equals(UL_TAG)) || tagName.equals(OL_TAG)) {
+                    var listOfLi = currentElement.select(LI_TAG);
+                    int liAmount = listOfLi.size();
+
+                    descriptionBuilder.append(UL_HTML_OPEN_TAG);
+
+                    for (int i = 0; i < liAmount; i++) {
+                        if (i == 0 && (i != liAmount - 1)) {
+                            descriptionBuilder.append(NEW_HTML_LINE);
+                        }
+                        descriptionBuilder.append(LI_HTML_OPEN_TAG)
+                                .append((listOfLi.get(i)).text())
+                                .append(LI_HTML_CLOSE_TAG);
+
                     }
-                } return descriptionBuilder.toString();
+                    descriptionBuilder.append(UL_HTML_CLOSE_TAG);
 
-            } else return currentElement.text();
+                } else if (!tagName.equals(P_TAG)) {
+                    break;
+                }
+            } return descriptionBuilder.toString();
 
         } else return null;
     }

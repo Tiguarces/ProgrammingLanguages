@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -57,5 +58,29 @@ public class LanguageTrend {
                 trendDate,
                 language
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        LanguageTrend trend = (LanguageTrend) o;
+        return Objects.equals(repositoryName, trend.repositoryName)         &&
+               Objects.equals(linkToRepository, trend.linkToRepository)     &&
+               Objects.equals(description, trend.description)               &&
+               Objects.equals(trendsDate, trend.trendsDate)                 &&
+               totalStars == trend.totalStars                               &&
+               monthlyStars == trend.monthlyStars;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(repositoryName, linkToRepository, totalStars, monthlyStars, description, trendsDate);
     }
 }

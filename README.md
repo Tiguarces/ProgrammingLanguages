@@ -32,6 +32,9 @@
 | Jsoup            |                    |
 | Lombok           |                    |
 
+## Database structure
+![alt-text](images/database.png)
+
 ## Running
 
 <p> 1) <b>To run Backend</b> firstly you have to download on your compuer Browser (Chromium) and correct chromedriver </p>

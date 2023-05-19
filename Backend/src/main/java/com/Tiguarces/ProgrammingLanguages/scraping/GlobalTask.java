@@ -16,7 +16,6 @@ public class GlobalTask {
     private final TiobeIndexTask tiobeIndexTask;
     private final LanguageTrendsTask trendsTask;
 
-    @PostConstruct
     @Scheduled(cron = "${custom.task.cron}")
     public void initTasks() {
         wikipediaTask.doScrapData();
